@@ -5,14 +5,13 @@ import { Server } from "net";
 let server = new Server({allowHalfOpen: true});
 
 server.on('connection', (stream) => {
-    let buffer: Buffer = Buffer.alloc(256)
+    let buffer: Buffer = Buffer.alloc(0);
     stream.on("data", (buff) => {
+        console.log(`Receiving: ${buff.toString("hex")}\n`);
         buffer = Buffer.concat([buffer, buff]);
     })
     stream.on("end", () => {
-        console.log(buffer.toString("ascii"));
-        console.log(stream.closed);
-        console.log(JSON.stringify(stream));
+        console.log("Writing:" + buffer.toString("hex"));
         if (!stream.closed) {
             try {
                 stream.write(buffer, (err?) => {
@@ -29,4 +28,4 @@ server.on('connection', (stream) => {
     })
 })
 
-server.listen(80);
+server.listen(3000);
